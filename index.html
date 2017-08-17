@@ -27,107 +27,97 @@
 </table></td></tr><tr><td>
 Semester 2, 2017&nbsp;<br>
 Websites for Course Assessment<br>
-Cameron Walker</td><td></td></tr></tbody></table><br><br>
-
-          <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
-            <tbody>
-              <tr>
-                <td><br><h3>Prelab Task</h3>
-                Below is a map showing the location of The Hard to Find Bookshop. Its location is shown as a green hexagon, with a red border. Zoom out to see its location relative to the rest of Earth...<br><br>
-                <div id="mapid" style="width: 900px; height: 600px;"></div>
-				<script>
-
-					var mymap = L.map('mapid').setView([-36.9232, 174.7855], 18);
-
-
-				    L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-					attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
-				}).addTo(mymap);
-
-				var HTFBookshop = {
-				      "type": "Feature",
-				      "properties": {
-				              "stroke": "#804000",
-					          "stroke-width": 2,
-					          "stroke-opacity": 1,
-					          "fill": "#2f7d2d",
-				              "fill-opacity": 0.5,
-				              "name": "Hard To Find Bookshop"
-				          },
-				      "geometry": {
-				        "type": "Polygon",
-				        "coordinates": [
-				          [
-				          [
-				              174.7857207451535,
-				              -36.9232879074001,
-				              0
-				            ],
-				            [
-				              174.7857140725832,
-				              -36.92326385681655,
-				              0
-				            ],
-				            [
-				              174.7856970651411,
-				              -36.9232638568329,
-				              0
-				            ],
-				            [
-				              174.7856799281623,
-				              -36.92319287583783,
-				              0
-				            ],
-				            [
-				              174.7854956680216,
-				              -36.92320881521817,
-				              0
-				            ],
-				            [
-				              174.7855041396369,
-				              -36.9233035179357,
-				              0
-				            ],
-				            [
-				              174.7857207451535,
-				              -36.9232879074001,
-				              0
-				            ]
-				          ]
-				        ]
-				      }
-				    };
-
-				    L.geoJson(HTFBookshop, {
-				    style: function(feature) {
-				      return{color: "#ff0000",
-				             fillColor: "#2f7d2d",
-				             fillOpacity: 0.5};
-				    }
-				    }).addTo(mymap);
-
-				L.marker([-36.92325, 174.7856]).addTo(mymap)
-						.bindPopup("<b>The Hard To Find Bookshop</b><br />").openPopup();
-
-
-					var popup = L.popup();
-
-					function onMapClick(e) {
-						popup
-							.setLatLng(e.latlng)
-							.setContent("You clicked the map at " + e.latlng.toString())
-							.openOn(mymap);
-					}
-
-					mymap.on('click', onMapClick);
-
-				</script>
-
-                <br></td>
-              </tr>
-            </tbody>
-          </table>
-          <br><br><br><br>
+Cameron Walker
+	</td><td></td></tr>
+	</tbody>
+	</table>
+	<br>
+<br>
+<br>
+<table style="text-align: left; width: 100%;" border="0" cellpadding="2" cellspacing="2">
+<tbody>
+<tr>
+<td>
+<h3>Prelab Task</h3>
+Below is a map showing the location of The Hard to Find Bookshop. Its
+location is shown as a green hexagon, with a red border. Zoom out to
+see its location relative to the rest of Earth...</td>
+</tr>
+<tr>
+<td style="text-align: center;"><br><table style="width: 909px; height: 631px; text-align: left; margin-left: auto; margin-right: auto;" border="0" cellpadding="2" cellspacing="2"><tbody><tr><td style="height: 600px; width: 900px; text-align: center;"><div style="width: 900px; height: 600px;" id="mapid"></div><script>var mymap = L.map('mapid').setView([-36.9232, 174.7855], 18);
+L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+}).addTo(mymap);
+var HTFBookshop = {
+"type": "Feature",
+"properties": {
+"stroke": "#804000",
+"stroke-width": 2,
+"stroke-opacity": 1,
+"fill": "#2f7d2d",
+"fill-opacity": 0.5,
+"name": "Hard To Find Bookshop"
+},
+"geometry": {
+"type": "Polygon",
+"coordinates": [
+[
+[
+174.7857207451535,
+-36.9232879074001,
+0
+],
+[
+174.7857140725832,
+-36.92326385681655,
+0
+],
+[
+174.7856970651411,
+-36.9232638568329,
+0
+],
+[
+174.7856799281623,
+-36.92319287583783,
+0
+],
+[
+174.7854956680216,
+-36.92320881521817,
+0
+],
+[
+174.7855041396369,
+-36.9233035179357,
+0
+],
+[
+174.7857207451535,
+-36.9232879074001,
+0
+]
+]
+]
+}
+};
+L.geoJson(HTFBookshop, {
+style: function(feature) {
+return{color: "#ff0000",
+fillColor: "#2f7d2d",
+fillOpacity: 0.5};
+}
+}).addTo(mymap);
+L.marker([-36.92325, 174.7856]).addTo(mymap)
+.bindPopup("<b>The Hard To Find Bookshop</b><br />").openPopup();
+var popup = L.popup();
+function onMapClick(e) {
+popup
+.setLatLng(e.latlng)
+.setContent("You clicked the map at " + e.latlng.toString())
+.openOn(mymap);
+}
+mymap.on('click', onMapClick);</script></td></tr></tbody></table>          <br><br><br><br>
         </td>
       </tr>
     </tbody>
