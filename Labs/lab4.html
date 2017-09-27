@@ -32,6 +32,7 @@
 		float: left;
 		margin-right: 8px;
 		opacity:0.7;
+		border: 2px;
 	}
 	</style>
 </head>
@@ -166,7 +167,7 @@ Cameron Walker
 				// method that we will use to update the control based on feature properties passed
 				info.update = function (props) {
 				    this._div.innerHTML = '<h4>Counts of Auckland Structural Fires:</h4>' +  (props ?
-				         '<br>' + props.NUMPOINTS + ' fires ' + '<br>'
+				         props.NUMPOINTS + ' fires ' + '<br>'
 				        : 'Hover over a hexagon to see fire count' + '<br>');
 					};
 
