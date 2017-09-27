@@ -71,81 +71,115 @@ see its location relative to the rest of Earth...
 		         <td style="height: 600px; width: 900px; text-align: center;">
 			   <div style="width: 900px; height: 600px;" id="mapid">
 			   </div>
+			   <script type="text/javascript" src="../js/AKLFiresHex.js"></script>
 			  <script>
-var mymap = L.map('mapid').setView([-36.9232, 174.7855], 18);
-L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
-attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
-}).addTo(mymap);
-var HTFBookshop = {
-"type": "Feature",
-"properties": {
-"stroke": "#804000",
-"stroke-width": 2,
-"stroke-opacity": 1,
-"fill": "#2f7d2d",
-"fill-opacity": 0.5,
-"name": "Hard To Find Bookshop"
-},
-"geometry": {
-"type": "Polygon",
-"coordinates": [
-[
-[
-174.7857207451535,
--36.9232879074001,
-0
-],
-[
-174.7857140725832,
--36.92326385681655,
-0
-],
-[
-174.7856970651411,
--36.9232638568329,
-0
-],
-[
-174.7856799281623,
--36.92319287583783,
-0
-],
-[
-174.7854956680216,
--36.92320881521817,
-0
-],
-[
-174.7855041396369,
--36.9233035179357,
-0
-],
-[
-174.7857207451535,
--36.9232879074001,
-0
-]
-]
-]
-}
-};
-L.geoJson(HTFBookshop, {
-style: function(feature) {
-return{color: "#ff0000",
-fillColor: "#2f7d2d",
-fillOpacity: 0.5};
-}
-}).addTo(mymap);
-L.marker([-36.92325, 174.7856]).addTo(mymap)
-.bindPopup("<b>The Hard To Find Bookshop</b><br />").openPopup();
-var popup = L.popup();
-function onMapClick(e) {
-popup
-.setLatLng(e.latlng)
-.setContent("You clicked the map at " + e.latlng.toString())
-.openOn(mymap);
-}
-mymap.on('click', onMapClick);
+				/*var mymap = L.map('mapid').setView([-37.1532, 174.9125], 9.2);*/
+				var mymap = L.map('mapid').setView([-36.89335, 174.84776], 10.5);
+				L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+				attribution: '&copy; OpenStreetMap | &copy; CartoDB | &copy; 2016 New Zealand Fire Service'
+				}).addTo(mymap);
+				var geojson;
+				L.geoJson(fireBins).addTo(mymap)
+
+				function getColor(d) {
+					return 	d > 30.5 	? 	'#6d0026' :
+							d > 20.5  	? 	'#e62f21' :
+							d > 12.5  	? 	'#f86c30' :
+							d > 6.5  	? 	'#fea649' :
+							d > 2   	? 	'#ffd76d' :
+							d > 0.5   	? 	'#ffffb2' :
+											'#fefded';
+					}
+				function style(feature) {
+					return {
+						fillColor: getColor(feature.properties.NUMPOINTS),
+						weight: 2,
+						opacity: 1,
+						color: 'white',
+						/*dashArray: '3',*/
+						fillOpacity: 0.7
+						};
+					}
+				function highlightFeature(e){
+					var layer=e.target;
+
+					layer.setStyle({
+						weight: 5,
+						color: '#666',
+						dashArray:'',
+						fillOpacity: 0.7
+						});
+
+					if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge){
+						layer.bringToFront();
+						}
+					info.update(layer.feature.properties);
+					}
+				function resetHighlight(e) {
+					geojson.resetStyle(e.target);
+					info.update();
+					}
+				function onEachFeature(feature, layer){
+					layer.on({
+						mouseover:highlightFeature,
+						mouseout: resetHighlight,
+						});
+					}
+
+				geojson = L.geoJson(fireBins, {
+						style: style,
+						onEachFeature: onEachFeature
+						}).addTo(mymap);
+
+				var info = L.control();
+
+				info.onAdd = function (map) {
+				    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+				    this.update();
+				    return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+				    this._div.innerHTML = '<h4>Counts of Auckland Structural Fires:</h4>' +  (props ?
+				        //'<b>' props.fireBins + '</b>
+				         + props.NUMPOINTS + ' fires '
+				        : 'Hover over a hexagon to see fire count');
+					};
+
+				info.addTo(mymap);
+
+				var legend = L.control({position: 'bottomright'});
+
+				legend.onAdd = function (map) {
+
+			    	var div = L.DomUtil.create('div', 'info legend'),
+		        	grades = [0, 0.5, 2, 6.5, 12.5, 20.5, 30.5],
+		        	key_labels = ["0","1-2","3-6","7-12","13-20","21-30","31+"],
+					labels = ["Number of fires"],
+					//labels = [],
+					from, to;
+
+			    	// loop through our density intervals and generate a label with a coloured square for each interval
+			    	for (var i = 0; i < grades.length; i++) {
+			    	    from=grades[i];
+			    	    to=grades[i+1];
+
+     				   div.innerHTML +=
+      				    /*  '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+      				      //grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+      				      key_labels[i] + (grades[i + 1] ? '<br>' : '+');
+			    	    }*/
+		        	    labels.push(
+		        	    	'<i style="background:' + getColor(from+0.1) + '"></i> ' +
+		        	    	key_labels[i]);
+					    }
+					div.innerHTML = labels.join('<br>');
+
+			    	return div;
+					};
+
+				legend.addTo(mymap);
           </script></td></tr></tbody></table>          <br><br><br><br>
         </td>
       </tr>
